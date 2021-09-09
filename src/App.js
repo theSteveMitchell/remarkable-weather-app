@@ -1,10 +1,10 @@
 import './App.css';
+import WeatherView from './weatherView';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-      </header>
+      <WeatherView location="Columbus" condition="72" />
     </div>
   );
 }
