@@ -1,5 +1,5 @@
 import { render, screen, waitForElementToBeRemoved } from '@testing-library/react';
-import WeatherView from './weatherView';
+import WeatherView from '../components/weatherView';
 
 const MOCK_LOCATION = {
   "Key": "18473_PC",
@@ -51,7 +51,7 @@ async function mockFetch(url, config) {
 
 beforeAll(() => jest.spyOn(window, 'fetch'))
 
-beforeEach(() => window.fetch.mockImplementation(mockFetch))
+beforeEach(() => window.fetch.mockImplementationOnce(mockFetch))
 
 test('renders passed location', async () => {
   render(<WeatherView location={MOCK_LOCATION} />);

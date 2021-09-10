@@ -1,4 +1,3 @@
-import React from 'react'
 
 async function conditionsForLocation(location_key) {
   const uri = conditions_url() + location_key
@@ -33,6 +32,7 @@ function conditions_url() {
   return base_url() + process.env.REACT_APP_ACCUWEATHER_API_CONDITIONS_ENDPOINT
 }
 
-export default {
+const AccuweatherApi = {
   conditionsForLocation
-}
+};
+export default AccuweatherApi;
