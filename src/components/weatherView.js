@@ -9,10 +9,9 @@ function WeatherView(props) {
       AccuweatherApi.conditionsForLocation(props.location.Key)
         .then((conditions) => {
           if (conditions)
-            if (conditions)
-              setCondition(conditions[0])
-            else
-              setCondition(conditions)
+            setCondition(conditions[0])
+          else
+            setCondition(conditions)
         })
     }
   }, [props]);

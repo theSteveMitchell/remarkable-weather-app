@@ -3,7 +3,7 @@ import { TextInput } from '@palmetto/palmetto-components';
 import '../styles/palmetto.css';
 
 function LocationInput(props) {
-  const [locationEntry, setLocationEntry] = useState(props.location.Key)
+  const [locationEntry, setLocationEntry] = useState(props.location.PrimaryPostalCode)
   function handleChange(e) {
     props.onLocationChange(e.target.value);
   }
@@ -14,7 +14,7 @@ function LocationInput(props) {
 
   return (
     <TextInput
-      placeholder="Enter location Key"
+      placeholder="Enter postal code"
       value={locationEntry}
       onBlur={handleChange}
       onChange={handleEntryChange} />

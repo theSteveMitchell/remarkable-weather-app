@@ -49,23 +49,52 @@ const ALT_MOCK_CONDITIONS = [{
   "Link": "http://www.accuweather.com/en/ch/trachselwald/3456/current-weather/384077_pc?lang=en-us"
 }]
 
+const MOCK_LOCATION = [
+  {
+    "Key": "37935_PC",
+    "Type": "PostalCode",
+    "LocalizedName": "Beverly Hills",
+    "EnglishName": "Beverly Hills",
+    "PrimaryPostalCode": "90210",
+    "AdministrativeArea": {
+      "ID": "CA",
+      "LocalizedName": "California",
+      "EnglishName": "California"
+    },
+    "TimeZone": {
+      "Code": "PDT",
+      "Name": "America/Los_Angeles",
+      "GmtOffset": -7,
+      "IsDaylightSaving": true,
+      "NextOffsetChange": "2021-11-07T09:00:00Z"
+    },
+  },
+]
+
 async function mockFetch(url, config) {
-  if (url.match(/18473_PC/gi)) {
+  console.log("mocking: " + url)
+  if (url.match(/currentconditions\/v1\/18473_PC/gi)) {
     return {
       ok: true,
       status: 200,
       json: async () => (MOCK_CONDITIONS),
     }
   }
-  else {
+  else if (url.match(/currentconditions\/v1\//gi)) {
     return {
       ok: true,
       status: 200,
       json: async () => (ALT_MOCK_CONDITIONS),
     }
   }
+  else if (url.match(/locations\/v1\//gi)) {
+    return {
+      ok: true,
+      status: 200,
+      json: async () => (MOCK_LOCATION),
+    }
+  }
 }
-
 
 beforeAll(() => jest.spyOn(window, 'fetch'))
 
@@ -75,9 +104,9 @@ test('updates the conditions when location changes', async () => {
   render(<App />);
   await waitForElementToBeRemoved(screen.getByText("Loading..."))
   const temp = screen.getByText('Current Temp: 38ºF')
-  const zip_input = screen.getByPlaceholderText("Enter location Key")
+  const zip_input = screen.getByPlaceholderText("Enter postal code")
 
-  fireEvent.blur(zip_input, { target: { value: '26634_AG' } })
+  fireEvent.blur(zip_input, { target: { value: '90210' } })
 
   await waitFor(() => expect(temp.textContent).toBe("Current Temp: 85ºF"))
 });

@@ -1,12 +1,27 @@
 
-async function conditionsForLocation(location_key) {
+function conditionsForLocation(location_key) {
   const uri = conditions_url() + location_key
   const queryString = objToQueryString({
     apikey: process.env.REACT_APP_ACCUWEATHER_API_SECRET_KEY,
   });
+
+  return json_fetch(uri + '?' + queryString)
+}
+
+function locationsForPostalCode(postal_code) {
+  const uri = locations_url()
+  const queryString = objToQueryString({
+    q: postal_code,
+    apikey: process.env.REACT_APP_ACCUWEATHER_API_SECRET_KEY,
+  });
+
+  return json_fetch(uri + '?' + queryString)
+}
+
+async function json_fetch(uri_query) {
   try {
     const response = await fetch(
-      uri + '?' + queryString);
+      uri_query);
     if (!response.ok)
       throw new Error(response.status);
     else
@@ -32,7 +47,12 @@ function conditions_url() {
   return base_url() + process.env.REACT_APP_ACCUWEATHER_API_CONDITIONS_ENDPOINT
 }
 
+function locations_url() {
+  return base_url() + process.env.REACT_APP_ACCUWEATHER_API_LOCATIONS_SEARCH_ENDPOINT
+}
+
 const AccuweatherApi = {
-  conditionsForLocation
+  conditionsForLocation,
+  locationsForPostalCode
 };
 export default AccuweatherApi;

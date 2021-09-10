@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import '../styles/app.css';
 import LocationInput from './locationInput';
 import WeatherView from './weatherView';
+import AccuweatherApi from '../api/accuweatherApi'
+import zipcodes from 'zipcodes-regex';
+
 
 const MOCK_LOCATION = {
   "Key": "18473_PC",
   "LocalizedName": "Columbus",
   "EnglishName": "Columbus",
+  "PrimaryPostalCode": "43214",
   "AdministrativeArea": {
     "ID": "OH",
     "LocalizedName": "Ohio",
@@ -24,21 +28,21 @@ const MOCK_LOCATION = {
 function App() {
   const [location, setLocation] = useState(MOCK_LOCATION)
   function handleLocationChange(new_location) {
-    // setLocation(location)
-    // only update the key for now...
-    if (new_location === location.Key)
+    if (!new_location.match(zipcodes["US"])) {
+      console.error("Only US postal codes supported :( you entered " + new_location)
       return
-    console.log("setting new location: " + new_location)
-    setLocation({
-      "Key": new_location,
-      "LocalizedName": "Honolulu",
-      "EnglishName": "Honolulu",
-      "AdministrativeArea": {
-        "ID": "OH",
-        "LocalizedName": "Ohio",
-        "EnglishName": "Ohio",
-      },
-    })
+    }
+
+    if (new_location === location.PrimaryPostalCode)
+      return // location did not change
+
+    const locations = AccuweatherApi.locationsForPostalCode(new_location)
+      .then((locations) => {
+        if (locations)
+          setLocation(locations[0])
+        else
+          setLocation(locations)
+      })
   }
 
   return (
