@@ -1,43 +1,34 @@
-import React, { useState } from 'react';
-
-const MOCK_CONDITIONS = {
-  "LocalObservationDateTime": "2021-09-08T23:27:00+02:00",
-  "EpochTime": 1631136420,
-  "WeatherText": "Clear",
-  "WeatherIcon": 33,
-  "HasPrecipitation": false,
-  "PrecipitationType": null,
-  "IsDayTime": false,
-  "Temperature": {
-    "Metric": {
-      "Value": 19.7,
-      "Unit": "C",
-      "UnitType": 17
-    },
-    "Imperial": {
-      "Value": 67,
-      "Unit": "F",
-      "UnitType": 18
-    }
-  },
-  "MobileLink": "http://www.accuweather.com/en/ch/trachselwald/3456/current-weather/384077_pc?lang=en-us",
-  "Link": "http://www.accuweather.com/en/ch/trachselwald/3456/current-weather/384077_pc?lang=en-us"
-}
-
+import React, { useEffect, useState } from 'react';
+import AccuweatherApi from './api/AccuweatherApi'
 
 function WeatherView({ location }) {
-  const [conditions, setConditions] = useState(MOCK_CONDITIONS)
+  const [condition, setCondition] = useState()
+
+  useEffect(() => {
+    AccuweatherApi.conditionsForLocation(location.Key)
+      .then((conditions) => {
+        setCondition(conditions[0])
+      })
+  }, []);
 
   return (
     <div className="WeatherView">
+      {location &&
+        <div>
+          Showing weather for location:{' '}{location.LocalizedName},{' '}{location.AdministrativeArea.LocalizedName}
+        </div>
+      }
+      {condition &&
+        <div>
 
-      <div>
-        Showing weather for location:{' '}{location.LocalizedName},{' '}{location.AdministrativeArea.LocalizedName}
-      </div>
-
-      <div>
-        Current Temp:{' '}{conditions.Temperature.Imperial.Value}ºF
-      </div>
+          Current Temp:{' '}{condition.Temperature.Imperial.Value}ºF
+        </div>
+      }
+      {!condition &&
+        <div>
+          Loading...
+        </div>
+      }
     </div>
   );
 }
