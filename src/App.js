@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import WeatherView from './weatherView';
 
@@ -17,34 +18,12 @@ const MOCK_LOCATION = {
   }
 }
 
-const MOCK_CONDITION = {
-  "LocalObservationDateTime": "2021-09-08T23:27:00+02:00",
-  "EpochTime": 1631136420,
-  "WeatherText": "Clear",
-  "WeatherIcon": 33,
-  "HasPrecipitation": false,
-  "PrecipitationType": null,
-  "IsDayTime": false,
-  "Temperature": {
-    "Metric": {
-      "Value": 19.7,
-      "Unit": "C",
-      "UnitType": 17
-    },
-    "Imperial": {
-      "Value": 67,
-      "Unit": "F",
-      "UnitType": 18
-    }
-  },
-  "MobileLink": "http://www.accuweather.com/en/ch/trachselwald/3456/current-weather/384077_pc?lang=en-us",
-  "Link": "http://www.accuweather.com/en/ch/trachselwald/3456/current-weather/384077_pc?lang=en-us"
-}
-
 function App() {
+  const [location, setLocation] = useState(MOCK_LOCATION)
+
   return (
     <div className="App">
-      <WeatherView location={MOCK_LOCATION} condition={MOCK_CONDITION} />
+      <WeatherView location={location} />
     </div>
   );
 }
