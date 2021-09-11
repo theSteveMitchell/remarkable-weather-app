@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput } from '@palmetto/palmetto-components';
+import { TextInput, Box, Button, Icon } from '@palmetto/palmetto-components';
 import '../styles/palmetto.css';
 
 function LocationInput(props) {
@@ -22,12 +22,33 @@ function LocationInput(props) {
     setLocationEntry(e.target.value)
   }
 
+  function getBrowserLocation(e) {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        props.onLocationChange(position)
+      })
+  }
+
   return (
-    <TextInput
-      placeholder="Enter postal code"
-      value={locationEntry}
-      onBlur={handleChange}
-      onChange={handleEntryChange} />
+
+    <Box
+      direction="row"
+      padding="base"
+      childGap="base">
+      <TextInput
+        placeholder="Enter postal code"
+        value={locationEntry}
+        onBlur={handleChange}
+        onChange={handleEntryChange} />
+      {navigator.geolocation &&
+        <Button
+          iconPrefix="gps"
+          isNaked
+          aria-label="geolocation"
+          onClick={getBrowserLocation} />
+      }
+    </Box >
+
   );
 }
 

@@ -59,10 +59,42 @@ const MOCK_HONOLULU = [
   }
 ]
 
+const MOCK_DENVER = [
+  {
+    "Key": "98763",
+    "Type": "LatLong",
+    "LocalizedName": "Denver",
+    "EnglishName": "Honolulu",
+    "PrimaryPostalCode": "78667",
+    "AdministrativeArea": {
+      "ID": "CO",
+      "LocalizedName": "Colorado",
+      "EnglishName": "Colorado",
+      "Level": 1
+    },
+    "TimeZone": {
+      "Code": "MST",
+      "Name": "Mountain/Denver",
+      "GmtOffset": -6,
+      "IsDaylightSaving": false,
+      "NextOffsetChange": null
+    }
+  }
+]
+
+const MOCK_DENVER_GEOPOSITION = {
+  "coords": {
+    "latitude": 40.023,
+    "longitude": -83.001
+  }
+}
+
 const mocks = {
   MOCK_COLUMBUS,
   MOCK_BEVERLY,
-  MOCK_HONOLULU
+  MOCK_HONOLULU,
+  MOCK_DENVER,
+  MOCK_DENVER_GEOPOSITION
 }
 
 export default mocks

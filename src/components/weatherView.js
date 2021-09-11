@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import AccuweatherApi from '../api/accuweatherApi'
+import { Box } from '@palmetto/palmetto-components';
 
 function WeatherView(props) {
   const [condition, setCondition] = useState()
@@ -17,24 +18,30 @@ function WeatherView(props) {
   }, [props]);
 
   return (
-    <div className="WeatherView">
-      {props.location &&
-        <div>
-          Showing weather for location:{' '}{props.location.LocalizedName},{' '}{props.location.AdministrativeArea.LocalizedName}
-        </div>
-      }
-      {condition &&
-        <div>
+    <Box direction="column"
+      spacing="base"
+      childGap="base"
+      margin="base" >
 
-          Current Temp:{' '}{condition.Temperature.Imperial.Value}ºF
-        </div>
-      }
-      {!condition &&
-        <div>
-          Loading...
-        </div>
-      }
-    </div>
+      <div className="WeatherView">
+        {props.location &&
+          <div>
+            Showing weather for location:{' '}{props.location.LocalizedName},{' '}{props.location.AdministrativeArea.LocalizedName}
+          </div>
+        }
+        {condition &&
+          <div>
+
+            Current Temp:{' '}{condition.Temperature.Imperial.Value}ºF
+          </div>
+        }
+        {!condition &&
+          <div>
+            Loading...
+          </div>
+        }
+      </div>
+    </Box>
   );
 }
 

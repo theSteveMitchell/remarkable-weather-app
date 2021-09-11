@@ -4,6 +4,8 @@ import LocationInput from './locationInput';
 import WeatherView from './weatherView';
 import AccuweatherApi from '../api/accuweatherApi'
 import zipcodes from 'zipcodes-regex';
+import { Box } from '@palmetto/palmetto-components';
+
 
 
 const MOCK_LOCATION = {
@@ -23,12 +25,21 @@ const MOCK_LOCATION = {
   }
 }
 
-
-
 function App() {
   const [location, setLocation] = useState(MOCK_LOCATION)
   function handleLocationChange(new_location) {
-    if (new_location.match(zipcodes["US"])) {
+    if (new_location.coords) {
+      AccuweatherApi.locationsForGeoposition(new_location.coords.latitude, new_location.coords.longitude)
+        .then((locations) => {
+          if (locations)
+            setLocation(locations[0])
+          else
+            setLocation(locations)
+        })
+      return
+    }
+
+    else if (new_location.match(zipcodes["US"])) {
       if (new_location === location.PrimaryPostalCode)
         return // postal code entered is the current location
     }
@@ -47,14 +58,16 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <Box direction="column"
+      spacing="base"
+      childGap="base" >
       <LocationInput
         location={location}
         onLocationChange={handleLocationChange}
       />
 
       <WeatherView location={location} />
-    </div>
+    </Box>
   );
 }
 

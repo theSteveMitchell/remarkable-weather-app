@@ -18,6 +18,17 @@ function locationsForText(text) {
   return json_fetch(uri + '?' + queryString)
 }
 
+function locationsForGeoposition(lat, lon) {
+  console.log("searching gps")
+  const uri = locations_geo_url()
+  const queryString = objToQueryString({
+    q: lat + "," + lon,
+    apikey: process.env.REACT_APP_ACCUWEATHER_API_SECRET_KEY,
+  });
+
+  return json_fetch(uri + '?' + queryString)
+}
+
 async function json_fetch(uri_query) {
   try {
     const response = await fetch(
@@ -51,8 +62,13 @@ function locations_url() {
   return base_url() + process.env.REACT_APP_ACCUWEATHER_API_LOCATIONS_SEARCH_ENDPOINT
 }
 
+function locations_geo_url() {
+  return base_url() + process.env.REACT_APP_ACCUWEATHER_API_LOCATIONS_GEO_SEARCH_ENDPOINT
+}
+
 const AccuweatherApi = {
   conditionsForLocation,
-  locationsForText
+  locationsForText,
+  locationsForGeoposition
 };
 export default AccuweatherApi;
