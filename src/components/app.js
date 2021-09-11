@@ -28,15 +28,16 @@ const MOCK_LOCATION = {
 function App() {
   const [location, setLocation] = useState(MOCK_LOCATION)
   function handleLocationChange(new_location) {
-    if (!new_location.match(zipcodes["US"])) {
-      console.error("Only US postal codes supported :( you entered " + new_location)
-      return
+    if (new_location.match(zipcodes["US"])) {
+      if (new_location === location.PrimaryPostalCode)
+        return // postal code entered is the current location
+    }
+    else {
+      if (new_location === (location.LocalizedName + ', ' + location.AdministrativeArea.LocalizedName))
+        return // text entered is the current city, state
     }
 
-    if (new_location === location.PrimaryPostalCode)
-      return // location did not change
-
-    const locations = AccuweatherApi.locationsForPostalCode(new_location)
+    AccuweatherApi.locationsForText(new_location)
       .then((locations) => {
         if (locations)
           setLocation(locations[0])

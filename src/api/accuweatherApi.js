@@ -8,10 +8,10 @@ function conditionsForLocation(location_key) {
   return json_fetch(uri + '?' + queryString)
 }
 
-function locationsForPostalCode(postal_code) {
+function locationsForText(text) {
   const uri = locations_url()
   const queryString = objToQueryString({
-    q: postal_code,
+    q: text,
     apikey: process.env.REACT_APP_ACCUWEATHER_API_SECRET_KEY,
   });
 
@@ -53,6 +53,6 @@ function locations_url() {
 
 const AccuweatherApi = {
   conditionsForLocation,
-  locationsForPostalCode
+  locationsForText
 };
 export default AccuweatherApi;
