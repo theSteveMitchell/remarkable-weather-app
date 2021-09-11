@@ -188,3 +188,17 @@ test('updates the conditions when location changes with city text', async () => 
 
   await waitFor(() => expect(temp.textContent).toBe("Current Temp: 83ºF"))
 });
+
+test('updates the textbox with the new location display name', async () => {
+  render(<App />);
+  await waitForElementToBeRemoved(screen.getByText("Loading..."))
+  const zip_input = screen.getByPlaceholderText("Enter postal code")
+
+  fireEvent.blur(zip_input, { target: { value: 'Honolulu' } })
+
+  await waitFor(() => expect(zip_input.value).toBe("Honolulu, Hawaii"))
+
+  fireEvent.blur(zip_input, { target: { value: '90210 1234' } })
+
+  await waitFor(() => expect(zip_input.value).toBe("90210"))
+});
