@@ -11,7 +11,7 @@ function WeatherView(props) {
       setLoadingConditions("loading")
       AccuweatherApi.conditionsForLocation(props.location.Key)
         .then((conditions) => {
-          if (conditions) {
+          if (conditions && conditions.length > 0) {
             setCondition(conditions[0])
             setLoadingConditions("success")
           }
@@ -55,11 +55,19 @@ function WeatherView(props) {
             </div>
           </div>
         }
-        {(props.queryStatus === "failed" || loadingConditions === "failed") &&
+        {(props.queryStatus === "failed") &&
           <Alert
             variant="warning"
             title="Location Not Found"
             message="Could not find a matching location"
+          />
+
+        }
+        {(props.queryStatus === "success" && loadingConditions === "failed") &&
+          <Alert
+            variant="warning"
+            title="Conditions Not Found"
+            message="Could not find current conditions at that location"
           />
 
         }

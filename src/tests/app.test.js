@@ -109,3 +109,14 @@ test('shows warning when location is not found', async () => {
 
   await waitFor(() => screen.getByText("Location Not Found"))
 });
+
+test('works without a default locations', async () => {
+  render(<App />);
+  global.navigator.geolocation = mockGeolocation;
+  const gps_button = screen.getByLabelText("geolocation")
+
+  fireEvent.click(gps_button)
+
+  await waitFor(() => expect(location_input().value).toBe("Denver, Colorado"))
+  await waitFor(() => screen.getByText("Current Temp: 20ºF"))
+});
