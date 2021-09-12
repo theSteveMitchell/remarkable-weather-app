@@ -12,18 +12,6 @@ function App(props) {
   const [queryStatus, setQueryStatus] = useState()
 
   function handleLocationChange(new_location) {
-    if (new_location.coords) {
-      beginUpdateLocation()
-      AccuweatherApi.locationsForGeoposition(new_location.coords.latitude, new_location.coords.longitude)
-        .then((locations) => {
-          if (locations && locations.length > 0)
-            succeedUpdateLocation(locations[0])
-          else
-            failUpdateLocation()
-        })
-      return
-    }
-
     if (new_location.length < 2)
       return //prevent search if insufficient text input
 
@@ -46,6 +34,21 @@ function App(props) {
       })
   }
 
+  function handleGetBrowserLocation(e) {
+    beginUpdateLocation()
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        beginUpdateLocation()
+        AccuweatherApi.locationForGeoposition(position.coords.latitude, position.coords.longitude)
+          .then((location) => {
+            if (location && !location.length)
+              succeedUpdateLocation(location)
+            else
+              failUpdateLocation()
+          })
+      })
+  }
+
   function beginUpdateLocation() {
     setQueryStatus("loading")
   }
@@ -60,18 +63,6 @@ function App(props) {
     setQueryStatus("failed")
   }
 
-  function noOpUpdateLocation() {
-    setQueryStatus("success")
-  }
-
-  function getBrowserLocation(e) {
-    beginUpdateLocation()
-    navigator.geolocation.getCurrentPosition(
-      function (position) {
-        handleLocationChange(position)
-      })
-  }
-
   return (
     <Box direction="column"
       spacing="base"
@@ -79,7 +70,7 @@ function App(props) {
       <LocationInput
         location={location}
         onLocationChange={handleLocationChange}
-        onGetBrowserGeoposition={getBrowserLocation}
+        onGetBrowserGeoposition={handleGetBrowserLocation}
       />
 
       <WeatherView

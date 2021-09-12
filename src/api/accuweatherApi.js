@@ -18,7 +18,7 @@ function locationsForText(text) {
   return json_fetch(uri + '?' + queryString)
 }
 
-function locationsForGeoposition(lat, lon) {
+function locationForGeoposition(lat, lon) {
   const uri = locations_geo_url()
   const queryString = objToQueryString({
     q: lat + "," + lon,
@@ -68,6 +68,6 @@ function locations_geo_url() {
 const AccuweatherApi = {
   conditionsForLocation,
   locationsForText,
-  locationsForGeoposition
+  locationForGeoposition
 };
 export default AccuweatherApi;

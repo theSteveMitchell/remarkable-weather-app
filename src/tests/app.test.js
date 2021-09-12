@@ -25,7 +25,7 @@ async function mockFetch(url, config) {
     mock_response = locationMocks.MOCK_HONOLULU
   }
   else if (url.match(/locations\/v1\/cities\/geoposition\/search\?q=40.023/)) {
-    mock_response = locationMocks.MOCK_DENVER
+    mock_response = locationMocks.MOCK_DENVER[0]
   }
   //console.log("received: " + url + "And responding with: " + mock_response)
   if (mock_response) {
