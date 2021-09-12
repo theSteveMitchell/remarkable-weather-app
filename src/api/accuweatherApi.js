@@ -19,7 +19,6 @@ function locationsForText(text) {
 }
 
 function locationsForGeoposition(lat, lon) {
-  console.log("searching gps")
   const uri = locations_geo_url()
   const queryString = objToQueryString({
     q: lat + "," + lon,

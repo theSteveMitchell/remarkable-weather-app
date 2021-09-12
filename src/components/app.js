@@ -7,53 +7,68 @@ import zipcodes from 'zipcodes-regex';
 import { Box } from '@palmetto/palmetto-components';
 
 
+function App(props) {
+  const [location, setLocation] = useState(props.defaultLocation)
+  const [queryStatus, setQueryStatus] = useState()
 
-const MOCK_LOCATION = {
-  "Key": "18473_PC",
-  "LocalizedName": "Columbus",
-  "EnglishName": "Columbus",
-  "PrimaryPostalCode": "43214",
-  "AdministrativeArea": {
-    "ID": "OH",
-    "LocalizedName": "Ohio",
-    "EnglishName": "Ohio",
-  },
-  "TimeZone": {
-    "Code": "EDT",
-    "Name": "America/New_York",
-    "GmtOffset": -4,
-  }
-}
-
-function App() {
-  const [location, setLocation] = useState(MOCK_LOCATION)
   function handleLocationChange(new_location) {
     if (new_location.coords) {
+      beginUpdateLocation()
       AccuweatherApi.locationsForGeoposition(new_location.coords.latitude, new_location.coords.longitude)
         .then((locations) => {
-          if (locations)
-            setLocation(locations[0])
+          if (location && locations.length > 0)
+            succeedUpdateLocation(locations[0])
           else
-            setLocation(locations)
+            failUpdateLocation()
         })
       return
     }
 
+    if (new_location.length < 2)
+      return //prevent search if insufficient text input
+
     else if (new_location.match(zipcodes["US"])) {
-      if (new_location === location.PrimaryPostalCode)
+      if (location && new_location === location.PrimaryPostalCode)
         return // postal code entered is the current location
     }
     else {
-      if (new_location === (location.LocalizedName + ', ' + location.AdministrativeArea.LocalizedName))
+      if (location && new_location === (location.LocalizedName + ', ' + location.AdministrativeArea.LocalizedName))
         return // text entered is the current city, state
     }
 
+    beginUpdateLocation()
     AccuweatherApi.locationsForText(new_location)
       .then((locations) => {
-        if (locations)
-          setLocation(locations[0])
+        if (locations && locations.length > 0)
+          succeedUpdateLocation(locations[0])
         else
-          setLocation(locations)
+          failUpdateLocation()
+      })
+  }
+
+  function beginUpdateLocation() {
+    setQueryStatus("loading")
+  }
+
+  function succeedUpdateLocation(location) {
+    setLocation(location)
+    setQueryStatus("success")
+  }
+
+  function failUpdateLocation() {
+    setLocation(undefined)
+    setQueryStatus("failed")
+  }
+
+  function noOpUpdateLocation() {
+    setQueryStatus("success")
+  }
+
+  function getBrowserLocation(e) {
+    beginUpdateLocation()
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        handleLocationChange(position)
       })
   }
 
@@ -64,9 +79,12 @@ function App() {
       <LocationInput
         location={location}
         onLocationChange={handleLocationChange}
+        onGetBrowserGeoposition={getBrowserLocation}
       />
 
-      <WeatherView location={location} />
+      <WeatherView
+        location={location}
+        queryStatus={queryStatus} />
     </Box>
   );
 }

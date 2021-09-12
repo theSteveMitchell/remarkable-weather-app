@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import AccuweatherApi from '../api/accuweatherApi'
-import { Box } from '@palmetto/palmetto-components';
+import { Box, Spinner, Alert } from '@palmetto/palmetto-components';
 
 function WeatherView(props) {
   const [condition, setCondition] = useState()
+  const [loadingConditions, setLoadingConditions] = useState()
 
   useEffect(() => {
     if (props.location) {
+      setLoadingConditions("loading")
       AccuweatherApi.conditionsForLocation(props.location.Key)
         .then((conditions) => {
-          if (conditions)
+          if (conditions) {
             setCondition(conditions[0])
-          else
+            setLoadingConditions("success")
+          }
+          else {
             setCondition(conditions)
+            setLoadingConditions("failed")
+          }
         })
     }
+    else
+      setCondition(undefined)
   }, [props]);
 
   return (
@@ -35,10 +43,25 @@ function WeatherView(props) {
             Current Temp:{' '}{condition.Temperature.Imperial.Value}ºF
           </div>
         }
-        {!condition &&
+        {(props.queryStatus === "loading" || loadingConditions === "loading") &&
           <div>
-            Loading...
+            <Spinner
+              variant="primary"
+              size="lg"
+            />
+            {/* It seems Spinner doesn't support aria-label, and overrides data-testid */}
+            <div>
+              Loading...
+            </div>
           </div>
+        }
+        {(props.queryStatus === "failed" || loadingConditions === "failed") &&
+          <Alert
+            variant="warning"
+            title="Location Not Found"
+            message="Could not find a matching location"
+          />
+
         }
       </div>
     </Box>

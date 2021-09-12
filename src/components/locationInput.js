@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput, Box, Button, Icon } from '@palmetto/palmetto-components';
+import { TextInput, Box, Button } from '@palmetto/palmetto-components';
 import '../styles/palmetto.css';
 
 function LocationInput(props) {
-  const [locationEntry, setLocationEntry] = useState(props.location.PrimaryPostalCode)
+  const [locationEntry, setLocationEntry] = useState("")
 
   useEffect(() => {
     if (props.location) {
@@ -22,12 +22,7 @@ function LocationInput(props) {
     setLocationEntry(e.target.value)
   }
 
-  function getBrowserLocation(e) {
-    navigator.geolocation.getCurrentPosition(
-      function (position) {
-        props.onLocationChange(position)
-      })
-  }
+
 
   return (
 
@@ -45,7 +40,7 @@ function LocationInput(props) {
           iconPrefix="gps"
           isNaked
           aria-label="geolocation"
-          onClick={getBrowserLocation} />
+          onClick={props.onGetBrowserGeoposition} />
       }
     </Box >
 
