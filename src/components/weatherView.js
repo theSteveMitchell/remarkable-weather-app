@@ -45,11 +45,11 @@ function WeatherView(props) {
         }
         {(props.queryStatus === "loading" || loadingConditions === "loading") &&
           <div>
+            {/* Spinner doesn't support (AFAICT) aria-label, and overrides data-testid https://github.com/palmetto/palmetto-components/blob/main/src/components/Spinner/Spinner.tsx#L42*/}
             <Spinner
               variant="primary"
               size="lg"
             />
-            {/* It seems Spinner doesn't support aria-label, and overrides data-testid */}
             <div>
               Loading...
             </div>

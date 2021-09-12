@@ -22,7 +22,12 @@ function LocationInput(props) {
     setLocationEntry(e.target.value)
   }
 
+  function handleEnterKeyPress(e) {
 
+    if (e.charCode === 13) {
+      handleChange(e)
+    }
+  }
 
   return (
 
@@ -34,6 +39,7 @@ function LocationInput(props) {
         placeholder="Enter postal code or city name"
         value={locationEntry}
         onBlur={handleChange}
+        inputProps={{ onKeyPress: handleEnterKeyPress }}
         onChange={handleEntryChange} />
       {navigator.geolocation &&
         <Button
