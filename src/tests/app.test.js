@@ -49,6 +49,10 @@ async function waitForAppLoad() {
   await waitForElementToBeRemoved(screen.getByText("Loading..."))
 }
 
+function location_input() {
+  return screen.getByPlaceholderText("Enter postal code or city name")
+}
+
 beforeAll(() => jest.spyOn(window, 'fetch'))
 
 beforeEach(() => window.fetch.mockImplementation(mockFetch))
@@ -56,9 +60,8 @@ beforeEach(() => window.fetch.mockImplementation(mockFetch))
 test('updates the conditions when location changes with postal code', async () => {
   await waitForAppLoad()
   const temp = screen.getByText('Current Temp: 38ºF')
-  const zip_input = screen.getByPlaceholderText("Enter postal code")
 
-  fireEvent.blur(zip_input, { target: { value: '90210' } })
+  fireEvent.blur(location_input(), { target: { value: '90210' } })
 
   await waitFor(() => expect(temp.textContent).toBe("Current Temp: 85ºF"))
 });
@@ -66,24 +69,23 @@ test('updates the conditions when location changes with postal code', async () =
 test('updates the conditions when location changes with city text', async () => {
   await waitForAppLoad()
   const temp = screen.getByText('Current Temp: 38ºF')
-  const zip_input = screen.getByPlaceholderText("Enter postal code")
 
-  fireEvent.blur(zip_input, { target: { value: 'Honolulu' } })
+  fireEvent.blur(location_input(), { target: { value: 'Honolulu' } })
 
   await waitFor(() => expect(temp.textContent).toBe("Current Temp: 83ºF"))
 });
 
 test('updates the textbox with the new location display name', async () => {
   await waitForAppLoad()
-  const zip_input = screen.getByPlaceholderText("Enter postal code")
+  const input = location_input()
 
-  fireEvent.blur(zip_input, { target: { value: 'Honolulu' } })
+  fireEvent.blur(input, { target: { value: 'Honolulu' } })
 
-  await waitFor(() => expect(zip_input.value).toBe("Honolulu, Hawaii"))
+  await waitFor(() => expect(input.value).toBe("Honolulu, Hawaii"))
 
-  fireEvent.blur(zip_input, { target: { value: '90210 1234' } })
+  fireEvent.blur(input, { target: { value: '90210 1234' } })
 
-  await waitFor(() => expect(zip_input.value).toBe("90210"))
+  await waitFor(() => expect(input.value).toBe("90210"))
 });
 
 test('updates the textbox and conditions with GPS search', async () => {
@@ -91,21 +93,19 @@ test('updates the textbox and conditions with GPS search', async () => {
 
   await waitForAppLoad()
   const gps_button = screen.getByLabelText("geolocation")
-  const zip_input = screen.getByPlaceholderText("Enter postal code")
   const temp = screen.getByText('Current Temp: 38ºF')
 
 
   fireEvent.click(gps_button)
 
-  await waitFor(() => expect(zip_input.value).toBe("Denver, Colorado"))
+  await waitFor(() => expect(location_input().value).toBe("Denver, Colorado"))
   await waitFor(() => expect(temp.textContent).toBe("Current Temp: 20ºF"))
 });
 
 test('shows warning when location is not found', async () => {
   await waitForAppLoad()
-  const zip_input = screen.getByPlaceholderText("Enter postal code")
 
-  fireEvent.blur(zip_input, { target: { value: 'Denial' } })
+  fireEvent.blur(location_input(), { target: { value: 'Denial' } })
 
   await waitFor(() => screen.getByText("Location Not Found"))
 });

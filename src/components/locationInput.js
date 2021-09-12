@@ -31,7 +31,7 @@ function LocationInput(props) {
       padding="base"
       childGap="base">
       <TextInput
-        placeholder="Enter postal code"
+        placeholder="Enter postal code or city name"
         value={locationEntry}
         onBlur={handleChange}
         onChange={handleEntryChange} />
