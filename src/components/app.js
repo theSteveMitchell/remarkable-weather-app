@@ -16,7 +16,6 @@ function App(props) {
       beginUpdateLocation()
       AccuweatherApi.locationsForGeoposition(new_location.coords.latitude, new_location.coords.longitude)
         .then((locations) => {
-          debugger
           if (locations && locations.length > 0)
             succeedUpdateLocation(locations[0])
           else

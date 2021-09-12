@@ -34,7 +34,7 @@ function WeatherView(props) {
       <div className="WeatherView">
         {props.location &&
           <div>
-            Showing weather for location:{' '}{props.location.LocalizedName},{' '}{props.location.AdministrativeArea.LocalizedName}
+            {props.location.LocalizedName},{' '}{props.location.AdministrativeArea.LocalizedName}
           </div>
         }
         {condition &&

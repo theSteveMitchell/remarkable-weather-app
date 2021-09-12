@@ -18,7 +18,7 @@ beforeEach(() => window.fetch.mockImplementationOnce(mockFetch))
 test('renders passed location', async () => {
   render(<WeatherView location={locationMocks.MOCK_COLUMBUS} />);
   await waitForElementToBeRemoved(screen.getByText("Loading..."))
-  screen.getByText('Showing weather for location: Columbus, Ohio')
+  screen.getByText('Columbus, Ohio')
 });
 
 test('renders fetched condition', async () => {
