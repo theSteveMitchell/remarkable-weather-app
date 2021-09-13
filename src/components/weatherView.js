@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import AccuweatherApi from '../api/accuweatherApi'
 import { Box, Spinner, Alert } from '@palmetto/palmetto-components';
 
@@ -6,7 +6,7 @@ function WeatherView(props) {
   const [condition, setCondition] = useState()
   const [loadingConditions, setLoadingConditions] = useState()
 
-  useEffect(() => {
+  const fetchCondition = useCallback(() => {
     if (props.location) {
       setLoadingConditions("loading")
       AccuweatherApi.conditionsForLocation(props.location.Key)
@@ -24,6 +24,14 @@ function WeatherView(props) {
     else
       setCondition()
   }, [props.location]);
+
+  useEffect(() => {
+    fetchCondition()
+    const interval = setInterval(() => {
+      fetchCondition()
+    }, 300000) // refresh ever 5 minutes
+    return () => clearInterval(interval)
+  }, [fetchCondition]);
 
   function backgroundColor() {
     return (condition && condition.IsDayTime) ? "secondary" : "dark"
