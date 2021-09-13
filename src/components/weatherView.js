@@ -95,20 +95,25 @@ function WeatherView(props) {
           </Box>
         }
         {(props.queryStatus === "failed") &&
-          <Alert
-            variant="warning"
-            title="Location Not Found"
-            message="Could not find a matching location"
-          />
-
+          <Box color="black" >
+            <Alert
+              variant="warning"
+              title="Location Not Found"
+              message="Could not find a matching location"
+              color="black"
+            />
+          </Box>
         }
         {(props.queryStatus === "success" && loadingConditions === "failed") &&
-          <Alert
-            variant="warning"
-            title="Conditions Not Found"
-            message="Could not find current conditions at that location"
-          />
 
+          <Box color="black" >
+            <Alert
+              variant="warning"
+              title="Conditions Not Found"
+              message="Could not find current conditions at that location"
+              color="black"
+            />
+          </Box>
         }
       </Box>
 

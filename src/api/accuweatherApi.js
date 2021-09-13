@@ -37,7 +37,7 @@ async function json_fetch(uri_query) {
     else
       return response.json();
   } catch (error) {
-    console.log('error: ' + error);
+    console.warn('error: ' + error);
   }
 }
 

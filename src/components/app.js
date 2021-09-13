@@ -6,6 +6,7 @@ import AccuweatherApi from '../api/accuweatherApi'
 import zipcodes from 'zipcodes-regex';
 import { Box } from '@palmetto/palmetto-components';
 import logo from '../images/accuweather.png';
+import ErrorBoundary from './errorBoundary'
 
 
 
@@ -70,17 +71,20 @@ function App(props) {
       <Box direction="column"
 
       >
-
-        <LocationInput
-          location={location}
-          onLocationChange={handleLocationChange}
-          onGetBrowserGeoposition={handleGetBrowserLocation}
-        />
+        <ErrorBoundary>
+          <LocationInput
+            location={location}
+            onLocationChange={handleLocationChange}
+            onGetBrowserGeoposition={handleGetBrowserLocation}
+          />
+        </ErrorBoundary>
       </Box>
 
-      <WeatherView
-        location={location}
-        queryStatus={queryStatus} />
+      <ErrorBoundary>
+        <WeatherView
+          location={location}
+          queryStatus={queryStatus} />
+      </ErrorBoundary>
 
       <footer>
         <Box alignSelf="flex-end" alignItems="center" padding="sm">

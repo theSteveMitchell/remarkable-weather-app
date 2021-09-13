@@ -11,7 +11,7 @@ const mockGeolocation = {
 };
 
 async function waitForAppLoad() {
-  render(<App defaultLocation={locationMocks.MOCK_COLUMBUS} />);
+  render(<App defaultLocation={locationMocks.MOCK_COLUMBUS[0]} />)
   await waitForElementToBeRemoved(screen.getByText("Loading..."))
 }
 
@@ -65,6 +65,8 @@ test('updates the textbox and conditions with GPS search', async () => {
 });
 
 test('shows warning when location is not found', async () => {
+  jest.spyOn(console, 'warn').mockImplementation(() => { }); // hide console noise
+
   await waitForAppLoad()
 
   fireEvent.blur(location_input(), { target: { value: 'Denial' } })
@@ -90,4 +92,11 @@ test('updates location when enter key is hit in locationInput', async () => {
   fireEvent.keyPress(input, { key: "Enter", code: 13, charCode: 13 });
   await waitFor(() => screen.getByText("Beverly Hills, California"))
   await waitFor(() => screen.getByText("Current Temp: 85ºF"))
+});
+
+test('degrades gracefully when there is an api error', async () => {
+  jest.spyOn(console, 'error').mockImplementation(() => { }); // hide console errors...it's gonna get messy here.
+
+  render(<App defaultLocation={{ "HereIam": "Stuck in the middle with you" }} />)
+  await waitFor(() => screen.getAllByText("Something went wrong."))
 });
