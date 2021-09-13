@@ -27,3 +27,15 @@ test('renders condition details and icon', async () => {
   screen.getAllByAltText("Rain")
 
 });
+
+test('fetches only once when rendered', async () => {
+  render(<WeatherView location={locationMocks.MOCK_HONOLULU[0]} />)
+  await waitForElementToBeRemoved(screen.getByText("Loading..."))
+  screen.getByText('Current Temp: 83ºF')
+  screen.getByText('Thunderstorm')
+  screen.getByText('Rain')
+  screen.getAllByAltText("Rain")
+
+  expect(window.fetch).toHaveBeenCalledTimes(1)
+
+});

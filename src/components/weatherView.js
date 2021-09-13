@@ -22,8 +22,8 @@ function WeatherView(props) {
         })
     }
     else
-      setCondition(undefined)
-  }, [props]);
+      setCondition()
+  }, [props.location]);
 
   function backgroundColor() {
     return (condition && condition.IsDayTime) ? "secondary" : "dark"
