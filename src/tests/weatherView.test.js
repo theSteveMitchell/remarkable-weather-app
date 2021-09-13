@@ -3,26 +3,27 @@ import WeatherView from '../components/weatherView';
 import conditionMocks from "./mocks/conditions";
 import locationMocks from "./mocks/locations";
 
-async function mockFetch(url, config) {
-  return {
-    ok: true,
-    status: 200,
-    json: async () => (conditionMocks.MOCK_COLUMBUS_CONDITIONS),
-  }
+async function waitForAppLoad() {
+  render(<WeatherView location={locationMocks.MOCK_COLUMBUS[0]} />)
+  await waitForElementToBeRemoved(screen.getByText("Loading..."))
 }
 
-beforeAll(() => jest.spyOn(window, 'fetch'))
-
-beforeEach(() => window.fetch.mockImplementationOnce(mockFetch))
-
 test('renders passed location', async () => {
-  render(<WeatherView location={locationMocks.MOCK_COLUMBUS} />);
-  await waitForElementToBeRemoved(screen.getByText("Loading..."))
+  await waitForAppLoad()
   screen.getByText('Columbus, Ohio')
 });
 
 test('renders fetched condition', async () => {
-  render(<WeatherView location={locationMocks.MOCK_COLUMBUS} />);
-  await waitForElementToBeRemoved(screen.getByText("Loading..."))
+  await waitForAppLoad()
   screen.getByText('Current Temp: 38ºF')
+});
+
+test('renders condition details and icon', async () => {
+  render(<WeatherView location={locationMocks.MOCK_HONOLULU[0]} />)
+  await waitForElementToBeRemoved(screen.getByText("Loading..."))
+  screen.getByText('Current Temp: 83ºF')
+  screen.getByText('Thunderstorm')
+  screen.getByText('Rain')
+  screen.getAllByAltText("Rain")
+
 });

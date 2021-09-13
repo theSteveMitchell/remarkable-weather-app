@@ -25,35 +25,74 @@ function WeatherView(props) {
       setCondition(undefined)
   }, [props]);
 
-  return (
-    <Box direction="column"
-      spacing="base"
-      childGap="base"
-      margin="base" >
+  function backgroundColor() {
+    return (condition && condition.IsDayTime) ? "secondary" : "dark"
+  }
 
-      <div className="WeatherView">
+  function weatherIcon() {
+    if (condition && condition.WeatherIcon) {
+      return process.env.REACT_APP_ACCUWEATHER_API_ICONS_URL + condition.WeatherIcon + ".svg"
+    }
+  }
+
+  function predicitationText() {
+    return condition.HasPrecipitation ? condition.PrecipitationType : "No Precipitation"
+  }
+
+  return (
+    <Box alignItems="center"
+      flex="auto"
+      background={backgroundColor()}
+      radius="md"
+      className="WeatherView"
+      margin="sm">
+
+      <Box direction="column"
+        alignItems="center"
+        childGap="md"
+        fontSize="2xl"
+        color="white"
+      >
+
+
         {props.location &&
           <div>
             {props.location.LocalizedName},{' '}{props.location.AdministrativeArea.LocalizedName}
           </div>
         }
         {condition &&
-          <div>
+          <Box alignItems="center">
+            <div>
+              Current Temp:{' '}{condition.Temperature.Imperial.Value}ºF
+            </div>
+            <div>
+              {' '}{condition.WeatherText}
+            </div>
+            <div>
+              {' '}{predicitationText()}
+            </div>
+            <Box alignItems="center" flex="auto" padding="sm" background="transparent">
+              <img src={weatherIcon()}
+                width="200px"
+                height="200px"
+                alt={predicitationText()} />
+            </Box>
+          </Box>
 
-            Current Temp:{' '}{condition.Temperature.Imperial.Value}ºF
-          </div>
         }
+
         {(props.queryStatus === "loading" || loadingConditions === "loading") &&
-          <div>
+          <Box direction="column"
+            alignItems="center">
             {/* Spinner doesn't support (AFAICT) aria-label, and overrides data-testid https://github.com/palmetto/palmetto-components/blob/main/src/components/Spinner/Spinner.tsx#L42*/}
             <Spinner
-              variant="primary"
-              size="lg"
+              variant="white"
+              size="xl"
             />
-            <div>
+            <Box>
               Loading...
-            </div>
-          </div>
+            </Box>
+          </Box>
         }
         {(props.queryStatus === "failed") &&
           <Alert
@@ -71,8 +110,9 @@ function WeatherView(props) {
           />
 
         }
-      </div>
-    </Box>
+      </Box>
+
+    </Box >
   );
 }
 

@@ -1,4 +1,4 @@
-const MOCK_COLUMBUS = {
+const MOCK_COLUMBUS = [{
   "Key": "18473_PC",
   "LocalizedName": "Columbus",
   "EnglishName": "Columbus",
@@ -12,7 +12,7 @@ const MOCK_COLUMBUS = {
     "Name": "America/New_York",
     "GmtOffset": -4,
   }
-}
+}]
 
 const MOCK_BEVERLY = [
   {

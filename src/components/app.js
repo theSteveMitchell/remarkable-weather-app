@@ -5,6 +5,8 @@ import WeatherView from './weatherView';
 import AccuweatherApi from '../api/accuweatherApi'
 import zipcodes from 'zipcodes-regex';
 import { Box } from '@palmetto/palmetto-components';
+import logo from '../images/accuweather.png';
+
 
 
 function App(props) {
@@ -59,24 +61,34 @@ function App(props) {
   }
 
   function failUpdateLocation() {
-    setLocation(undefined)
+    setLocation()
     setQueryStatus("failed")
   }
 
   return (
-    <Box direction="column"
-      spacing="base"
-      childGap="base" >
-      <LocationInput
-        location={location}
-        onLocationChange={handleLocationChange}
-        onGetBrowserGeoposition={handleGetBrowserLocation}
-      />
+    <Box minHeight="100%" background="light">
+      <Box direction="column"
+
+      >
+
+        <LocationInput
+          location={location}
+          onLocationChange={handleLocationChange}
+          onGetBrowserGeoposition={handleGetBrowserLocation}
+        />
+      </Box>
 
       <WeatherView
         location={location}
         queryStatus={queryStatus} />
-    </Box>
+
+      <footer>
+        <Box alignSelf="flex-end" alignItems="center" padding="sm">
+          Data provided by:
+          <img src={logo} className="App-logo" alt="logo" width="70px" />
+        </Box>
+      </footer>
+    </Box >
   );
 }
 

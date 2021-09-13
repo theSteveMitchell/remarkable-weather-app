@@ -49,10 +49,10 @@ const MOCK_BEVERLY_CONDITIONS = [{
 const MOCK_HONOLULU_CONDITIONS = [{
   "LocalObservationDateTime": "2021-09-08T23:27:00+02:00",
   "EpochTime": 1631136420,
-  "WeatherText": "Clear",
-  "WeatherIcon": 33,
-  "HasPrecipitation": false,
-  "PrecipitationType": null,
+  "WeatherText": "Thunderstorm",
+  "WeatherIcon": 15,
+  "HasPrecipitation": true,
+  "PrecipitationType": "Rain",
   "IsDayTime": false,
   "Temperature": {
     "Metric": {
