@@ -2,7 +2,8 @@
 
 A browser app to show current weather conditions anywhere on Earth. 
 
-### View Screenshot at public/Screenshot.png 
+### GIF
+![screeny](https://user-images.githubusercontent.com/950669/137359260-ac61fabd-1cdf-4836-93b9-20165844b01e.gif)
 
 # Running locally 
 
@@ -32,6 +33,7 @@ The app will display
 
 ## Tests
 run `yarn test` to see tests pass
+![screeny](https://user-images.githubusercontent.com/950669/137359239-58d2d909-b17c-496b-acb6-0f49ffec8035.gif)
 
 ## Design / Implementation / Tradeoffs.
 
