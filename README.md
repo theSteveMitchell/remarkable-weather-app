@@ -8,14 +8,13 @@ A browser app to show current weather conditions anywhere on Earth.
 # Running locally 
 
 1. clone this repo locally 
-    * `git clone *****.gitbundle`
-    * or unpack the zip archive
 2. `cd` to project root directoy
-3. run `yarn install`
-4. Run the development server:
+3. Acquire a developer API key from https://developer.accuweather.com/ and add it to `.env` (or `.env.local`)
+4. run `yarn install`
+5. Run the development server:
     * `yarn start` 
     * (and if yarn doesn't do it for you) open a browser to `localhost:3000`)
-5. Or, run the production build:
+6. Or, run the production build:
     * `yarn build`
     * `yarn global add serve`
     * `serve -s build`
@@ -42,7 +41,6 @@ I had four primary goals for this project:
 1. Use React with the latest version and current best practices, where I could
 2. Create the app in small, incremental steps, with tests included at each step (sort of TDD, but not quite)
 3. Build a cool app that looked nice and is easy to use.
-4. Learn about Palmetto-Components and use them effectively
 
 ## Tech stack and design
 
@@ -64,33 +62,6 @@ This app uses react-testing-library. My approach to testing was to test interact
 
 The obvious exception is API stubs. I used Jest spy to mock the API calls for all the tets. These are setup in `src/setupTests.js`. That ugly code uses a series of regex matches to determine what data to return in the mocked fetch calls. `src/tests/mocks` contains the mocked data for locations and conditions.
 
-I'm submitting this project as a .gitbundle in addition to a .zip file, mostly because I think the commit history is important to show the process of incremental building. I began with a simple `WeatherView` that used stubbed location and condition data. I build tests, and then incrementally eveolved the functionality. No doubt this took a lot longer, but I learned a lot. 
-
-## Look, feel, and production readiness
-
-As a simple app, I'm happy with what this does, and the interaction feels very comfortable for me. 
-
-Things I would have done differently to make a production app:
-1. Autocomplete city search. I originally chose Accuweather's API because it was the only service the offered an autocomplete API. Unfortunately, with its really low call limits, I don't think that would be practical. Also, since my input is wrapped in the TextInput component, it would be a lot of time-consuming fun to implement the UI for this.
-3. Radar display. Radar was something I really wanted to show, and was another reason I chose Accuweather's API. I didn't notice at the time that it was only available for the Prime package at $250/month. A discerning engineer (or manager) might appreciate my fiscal restaint in cutting this from scope.  
-4. Hourly forecast. This wouldn't have been too complicated to add. But it only expands on the patterns I've already built, so we wouldn't have learned much new, I don't think. 
-5. Protected the API key. I intentionally included my API key in this submission, for your convenience. But if this were a real production app, the key would be exposed in the user's browser calls. I could address this by proxying calls to my own backend, but unless I also added my own authenticaion, that wouldn't help with throttling ratelimiting the api calls
-
-## Palmetto Components. 
-
-This was an obvious choice, as everyone knows @palmetto-components is the gold standard of amazing corporate branded components. 
-
-These components made it easy to setup nice-looking and consistent app layout. There were a couple of cases where I had to dig beyond the documentation and into source code to figure out how some pieces worked, which was a fun exercise:
-1. Palmetto Spinner doesn't support labels or aria-labels, and the test-id is hard-coded as "spinner-testid". This caused a little extra work, since I wanted to only assert on what the user could actually see/know. Keeping the "Loading..." text under the spinner was a fine workaround.
-2. I needed the TextInput component to trigger an onKeyPress handler, so found the `InputProps` that it passes to its child `Input`. This actually is in the documentation, but I didn't see it there until after the fact.
-
-### On code styling, and especially the lack thereof. 
-
-Some of the code in this project is auto-generated from Create-React-app. Some is copy-pasta from Accuweather API documentation. Some is lifted from React docs or work I've done in the past. Some code I wrote on a Monday morning, and some on a Thursday evening. You will find all sorts of code styling choices in this project, and I gurantee you will find some of my style choices offensive. I've worked across so many languages and in so many different styles, I rarely notice missing semicolons (or should I say, superfluous semicolons?) and multiple empty lines are often just context clues for me.
-
-Before submitting, I began to add ESlint with a reasonable rulesset like Airbnb's. But, adapting to that ruleset would have resulted in several thousand small changes, many of which would be in code files that I never touched or typed myself. I don't think that would help represent my work. On a large team, I do understand the importance of consistent styling, and I'm happy to stay consistent with chosen styles.
-
-Thank you for looking at my code. 
 
 
 
