@@ -1,73 +1,56 @@
-
-function conditionsForLocation(location_key) {
-  const uri = conditions_url() + location_key
-  const queryString = objToQueryString({
-    apikey: process.env.REACT_APP_ACCUWEATHER_API_SECRET_KEY,
-  });
-
-  return json_fetch(uri + '?' + queryString)
-}
-
-function locationsForText(text) {
-  const uri = locations_url()
-  const queryString = objToQueryString({
-    q: text,
-    apikey: process.env.REACT_APP_ACCUWEATHER_API_SECRET_KEY,
-  });
-
-  return json_fetch(uri + '?' + queryString)
-}
-
-function locationForGeoposition(lat, lon) {
-  const uri = locations_geo_url()
-  const queryString = objToQueryString({
-    q: lat + "," + lon,
-    apikey: process.env.REACT_APP_ACCUWEATHER_API_SECRET_KEY,
-  });
-
-  return json_fetch(uri + '?' + queryString)
-}
-
-async function json_fetch(uri_query) {
-  try {
-    const response = await fetch(
-      uri_query);
-    if (!response.ok)
-      throw new Error(response.status);
-    else
-      return response.json();
-  } catch (error) {
-    console.warn('error: ' + error);
-  }
-}
-
-function objToQueryString(obj) {
-  const keyValuePairs = [];
-  for (const key in obj) {
-    keyValuePairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
-  }
-  return keyValuePairs.join('&');
-}
-
-function base_url() {
-  return process.env.REACT_APP_ACCUWEATHER_API_BASE_URL
-}
-
-function conditions_url() {
-  return base_url() + process.env.REACT_APP_ACCUWEATHER_API_CONDITIONS_ENDPOINT
-}
-
-function locations_url() {
-  return base_url() + process.env.REACT_APP_ACCUWEATHER_API_LOCATIONS_SEARCH_ENDPOINT
-}
-
-function locations_geo_url() {
-  return base_url() + process.env.REACT_APP_ACCUWEATHER_API_LOCATIONS_GEO_SEARCH_ENDPOINT
-}
-
 const AccuweatherApi = {
-  conditionsForLocation,
-  locationsForText,
-  locationForGeoposition
-};
+  conditions_url: process.env.REACT_APP_ACCUWEATHER_API_BASE_URL + process.env.REACT_APP_ACCUWEATHER_API_CONDITIONS_ENDPOINT,
+  locations_url: process.env.REACT_APP_ACCUWEATHER_API_BASE_URL + process.env.REACT_APP_ACCUWEATHER_API_LOCATIONS_SEARCH_ENDPOINT,
+  locations_geo_url: process.env.REACT_APP_ACCUWEATHER_API_BASE_URL + process.env.REACT_APP_ACCUWEATHER_API_LOCATIONS_GEO_SEARCH_ENDPOINT,
+
+  async conditionsForLocation(location_key) {
+    const uri = this.conditions_url + location_key
+    const queryString = this.objToQueryString({
+      apikey: process.env.REACT_APP_ACCUWEATHER_API_SECRET_KEY,
+    });
+
+    return this.json_fetch(`${uri}?${queryString}`)
+  },
+  async locationsForText(text) {
+    const uri = this.locations_url
+    const queryString = this.objToQueryString({
+      q: text,
+      apikey: process.env.REACT_APP_ACCUWEATHER_API_SECRET_KEY,
+    });
+
+    return this.json_fetch(`${uri}?${queryString}`)
+  },
+
+  async locationForGeoposition(lat, lon) {
+    const uri = this.locations_geo_url
+    const queryString = this.objToQueryString({
+      q: lat + "," + lon,
+      apikey: process.env.REACT_APP_ACCUWEATHER_API_SECRET_KEY,
+    });
+
+    return this.json_fetch(`${uri}?${queryString}`)
+  },
+
+  async json_fetch(uri_query) {
+    try {
+      const response = await fetch(
+        uri_query);
+      if (!response.ok)
+        throw new Error(response.status);
+      else
+        return response.json();
+    } catch (error) {
+      console.warn('error: ' + error);
+    }
+  },
+
+  objToQueryString: (obj) => {
+    const keyValuePairs = [];
+    for (const key in obj) {
+      keyValuePairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
+    }
+    return keyValuePairs.join('&');
+  },
+}
+
 export default AccuweatherApi;
